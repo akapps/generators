@@ -10,19 +10,18 @@ import org.akapps.tools.generators.code.GeneratorResolver
  */
 class DefaultGeneratorResolver implements GeneratorResolver {
 
-    private final CodeGenerator nullSafeGenerator = {Object o -> "null"}
     private final simpleTypesGenerator = new SimpleTypesCodeGenerator()
     private final arraysGenerator = new ArrayCodeGenerator(this)
     private final collectionsGenerator = new CollectionCodeGenerator(this)
 
     @Override
-    <T> CodeGenerator<T> findGenerator(T object) {
-        if (object == null)     return nullSafeGenerator
+    <T, V extends T> CodeGenerator<T> findGenerator(Class<T> type, V object) {
+        if (object == null)     return NULLSAFE_GENERATOR
 
-        if (object.class.isArray())
+        if (type.isArray())
             return arraysGenerator
 
-        if (object instanceof Collection)
+        if (Collection.isAssignableFrom(type))
             return collectionsGenerator
 
         return simpleTypesGenerator

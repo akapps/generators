@@ -1,4 +1,4 @@
-package org.akapps.tools.generators.code
+package org.akapps.tools.generators.code.intern
 
 import groovy.json.StringEscapeUtils
 import groovy.transform.CompileStatic

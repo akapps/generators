@@ -1,6 +1,7 @@
-package org.akapps.tools.generators.code
+package org.akapps.tools.generators.code.intern
 
 import groovy.transform.CompileStatic
+import org.akapps.tools.generators.code.intern.TypesCodeWriter
 import org.junit.Test
 
 import java.nio.file.StandardOpenOption

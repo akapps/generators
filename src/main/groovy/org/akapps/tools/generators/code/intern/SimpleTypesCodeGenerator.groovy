@@ -1,7 +1,6 @@
 package org.akapps.tools.generators.code.intern
 
 import org.akapps.tools.generators.code.CodeGenerator
-import org.akapps.tools.generators.code.TypesCodeWriter
 
 /**
  * A code generator that handles simple Java types, based upon {@link TypesCodeWriter}

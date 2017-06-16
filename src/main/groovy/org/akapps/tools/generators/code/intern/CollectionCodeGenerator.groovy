@@ -41,7 +41,7 @@ class CollectionCodeGenerator<C extends Collection> implements CodeGenerator<C> 
     private String withArrays(Collection values) {
         if (values.isEmpty())   return ""
 
-        def colValues = values.collect { generatorResolver.findGenerator(it).asInstantiationCode(it) }
+        def colValues = values.collect { generatorResolver.findGenerator(it.class, it).asInstantiationCode(it) }
         return "Arrays.asList(${colValues.join(', ')})"
     }
 

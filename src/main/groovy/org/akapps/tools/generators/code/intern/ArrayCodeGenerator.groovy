@@ -33,7 +33,7 @@ class ArrayCodeGenerator implements CodeGenerator<Object> {
         if (Array.getLength(value) == 0) {
             return "new ${arrayType.simpleName}[0]"
         } else {
-            def arrayValues = value.collect { generatorResolver.findGenerator(it).asInstantiationCode(it) }
+            def arrayValues = value.collect { generatorResolver.findGenerator(arrayType, it).asInstantiationCode(it) }
             return "new ${arrayType.simpleName}[]{ ${arrayValues.join(', ')} }"
         }
     }

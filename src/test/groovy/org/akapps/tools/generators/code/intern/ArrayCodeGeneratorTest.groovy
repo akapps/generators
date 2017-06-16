@@ -8,7 +8,7 @@ class ArrayCodeGeneratorTest {
 
     CodeGenerator unitGenerator
 
-    GeneratorResolver generatorResolver = { Object o -> unitGenerator}
+    GeneratorResolver generatorResolver = { Class c, Object o -> unitGenerator}
 
     ArrayCodeGenerator generator = new ArrayCodeGenerator(generatorResolver)
 

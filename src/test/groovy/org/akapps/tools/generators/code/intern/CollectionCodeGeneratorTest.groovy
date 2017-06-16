@@ -10,7 +10,7 @@ class CollectionCodeGeneratorTest {
 
     CodeGenerator unitGenerator = {Object o -> o.toString()}
 
-    GeneratorResolver generatorResolver = { Object o -> unitGenerator}
+    GeneratorResolver generatorResolver = { Class c, Object o -> unitGenerator}
 
     CollectionCodeGenerator generator = new CollectionCodeGenerator(generatorResolver)
 
@@ -69,7 +69,7 @@ class CollectionCodeGeneratorTest {
 
     @Test
     void asInstantiationCode_EmptyTypedCollection() {
-        def values = Collections.emptySortedSet()
+        def values = Collections.unmodifiableSortedSet(new TreeSet())
         assert generator.asInstantiationCode(values) == 'new TreeSet<>()'
     }
 }
