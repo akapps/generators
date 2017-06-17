@@ -5,6 +5,7 @@ import org.akapps.tools.generators.code.CodeGenerator
 import org.akapps.tools.generators.code.ReflectionBeanCodeGenerator
 import org.akapps.tools.generators.code.JavaSoftware
 import org.akapps.tools.generators.code.intern.DefaultGeneratorResolver
+import org.joda.time.LocalDate
 import org.junit.Test
 
 import java.sql.Timestamp
@@ -48,7 +49,8 @@ class ReflectionToCodeScenarioIT {
 
     @Test
     void asInstantiationCode_SimpleJavaObject() {
-        def tested = new JavaSoftware("com.company", "licencedProduct", new BigDecimal("49.99"),
+        def tested = new JavaSoftware("com.company", "licencedProduct", new LocalDate(2015, 4, 2),
+                new BigDecimal("49.99"),
                 ["www.my-blog.org", "www.twitter.com"] as Set)
 
         def lines = generator.asInstantiationCode(tested)
@@ -57,6 +59,7 @@ class ReflectionToCodeScenarioIT {
                 'final JavaSoftware javaSoftware = new JavaSoftware();',
                 'javaSoftware.setGroup("com.company");',
                 'javaSoftware.setArtifact("licencedProduct");',
+                'javaSoftware.setReleaseDate(new LocalDate(2015, 4, 2));',
                 'javaSoftware.setAnnualLicence(new BigDecimal("49.99"));',
                 'javaSoftware.setKnownReferences(new LinkedHashSet<>(Arrays.asList("www.my-blog.org", "www.twitter.com")));'
         ]
