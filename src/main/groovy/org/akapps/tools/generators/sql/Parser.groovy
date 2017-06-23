@@ -1,6 +1,7 @@
 package org.akapps.tools.generators.sql
 
 import groovy.transform.TupleConstructor
+import org.akapps.tools.generators.sql.parser.ColumnDeclarationParser
 import org.akapps.tools.generators.sql.parser.TableDeclarationParser
 import org.akapps.tools.generators.sql.structure.Table
 import org.akapps.tools.generators.sql.structure.TableBuilder
@@ -97,15 +98,15 @@ class Parser {
         schema.tables.put(tableName.tableName, builder)
 
         tp.readColumnDeclarations().each {dec ->
-            def words = dec.split()
             if (dec.startsWith("CONSTRAINT ")) {
+                def words = dec.split()
                 // FIXME Not necessarily a PK, PK decomposition NOK
                 builder.primaryKey(words[1], words[4])
             }
             else {
-                def nullable = dec.toLowerCase().contains("not null")
-                // TODO Manque le reste...
-                builder.addColumn(words[0], words[1], nullable)
+                def colParser = new ColumnDeclarationParser(dec)
+                builder.addColumn(colParser.readColumnName(), colParser.readColumnType(),
+                        colParser.isDeclaredNonNullable(), colParser.readDefaultValue())
             }
         }
     }
