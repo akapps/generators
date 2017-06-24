@@ -21,6 +21,8 @@ class ReflectionBeanCodeGenerator implements CodeGenerator<Object> {
 
     private final GeneratorResolver generatorResolver
 
+    BeanNamingStrategy helper = new JavaBeanSetterNamingStrategy()
+
     /** If true, setters for null values will be generated as well */
     boolean explicit = false
 
@@ -30,12 +32,9 @@ class ReflectionBeanCodeGenerator implements CodeGenerator<Object> {
 
     @Override
     String asInstantiationCode(Object bean) {
-        def type = bean.class
-        def name = type.simpleName.uncapitalize()
+        def instance = helper.instanciateNew(bean.class)
 
-        def result = []
-
-        result << "final ${type.simpleName} $name = new ${type.simpleName}();"
+        def result = [instance.instanciationCode]
 
         getFieldsToGenerate(bean).each { field ->
             field.accessible = true
@@ -43,11 +42,12 @@ class ReflectionBeanCodeGenerator implements CodeGenerator<Object> {
 
             if (value != null || explicit) {
                 def generatedCode = generatorResolver.findGenerator(field.type, value).asInstantiationCode(value)
-                result << "${name}.set${field.name.capitalize()}($generatedCode);"
+                result << helper.setAttributeValue(instance.variableName, field.name, generatedCode)
             }
         }
+
         // TODO One single String is a poor signature and must be enhanced
-        return result.join('\n')
+        return helper.join(result)
     }
 
     private List<Field> getFieldsToGenerate(Object object) {
