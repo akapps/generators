@@ -27,4 +27,17 @@ class SimpleTypesCodeGeneratorTest {
         assert e.message.startsWith('No signature of method:')
     }
 
+    @Test
+    void handledTypes() {
+        def handledTypes = SimpleTypesCodeGenerator.handledTypes
+        def expected = [
+                boolean.class, int.class, long.class, float.class, double.class,
+                Boolean, Integer, Long, Float, Double,
+                BigDecimal, Date, String, Enum
+        ]
+
+        assert handledTypes.size() == expected.size()
+        assert handledTypes.containsAll(expected)
+        assert expected.containsAll(handledTypes)
+    }
 }

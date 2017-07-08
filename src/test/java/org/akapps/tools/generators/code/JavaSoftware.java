@@ -3,6 +3,7 @@ package org.akapps.tools.generators.code;
 import org.joda.time.LocalDate;
 
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.Set;
 
 /**
@@ -19,6 +20,10 @@ public class JavaSoftware {
     private BigDecimal annualLicence;
 
     private Set<String> knownReferences;
+
+    public JavaSoftware() {
+        this.knownReferences = Collections.emptySet();
+    }
 
     public JavaSoftware(String group, String artifact, LocalDate releaseDate, BigDecimal annualLicence,
                         Set<String> knownReferences) {

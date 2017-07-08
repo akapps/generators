@@ -1,4 +1,4 @@
-package org.akapps.tools.generators.code
+package org.akapps.tools.generators.code.reflect
 
 /**
  * Implementation based on the usage of JavaBean oriented setters.
@@ -8,7 +8,7 @@ package org.akapps.tools.generators.code
 class JavaBeanSetterNamingStrategy implements BeanNamingStrategy {
 
     @Override
-    BeanNamingStrategy.Instanciator instanciateNew(Class beanType) {
+    BeanNamingStrategy.Instanciator instantiateNew(Class beanType) {
         def simpleName = beanType.simpleName
         def beanName = simpleName.uncapitalize()
 

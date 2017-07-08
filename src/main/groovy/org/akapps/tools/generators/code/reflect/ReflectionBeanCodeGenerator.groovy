@@ -1,9 +1,7 @@
-package org.akapps.tools.generators.code
+package org.akapps.tools.generators.code.reflect
 
-import org.akapps.tools.generators.util.ReflectionUtils
-
-import java.lang.reflect.Field
-import java.lang.reflect.Modifier
+import org.akapps.tools.generators.code.CodeGenerator
+import org.akapps.tools.generators.code.GeneratorResolver
 
 /**
  * A Generator for generic Java object.
@@ -17,8 +15,7 @@ import java.lang.reflect.Modifier
  */
 class ReflectionBeanCodeGenerator implements CodeGenerator<Object> {
 
-    private static final GROOVY_FIELDS = ['$staticClassInfo', '$staticClassInfo$', '__$stMC', 'metaClass']
-
+    private final FieldsCollector fieldsCollector = new FieldsCollector()
     private final GeneratorResolver generatorResolver
 
     BeanNamingStrategy helper = new JavaBeanSetterNamingStrategy()
@@ -30,13 +27,17 @@ class ReflectionBeanCodeGenerator implements CodeGenerator<Object> {
         this.generatorResolver = generatorResolver
     }
 
+    def addFilteredFields(FieldFilter... filters) {
+        fieldsCollector.filters.addAll(filters)
+    }
+
     @Override
     String asInstantiationCode(Object bean) {
-        def instance = helper.instanciateNew(bean.class)
+        def instance = helper.instantiateNew(bean.class)
 
-        def result = [instance.instanciationCode]
+        def result = [instance.instantiationCode]
 
-        getFieldsToGenerate(bean).each { field ->
+        fieldsCollector.getFieldsToGenerate(bean).each { field ->
             field.accessible = true
             def value = field.get(bean)
 
@@ -48,20 +49,5 @@ class ReflectionBeanCodeGenerator implements CodeGenerator<Object> {
 
         // TODO One single String is a poor signature and must be enhanced
         return helper.join(result)
-    }
-
-    private List<Field> getFieldsToGenerate(Object object) {
-        return getAttributes(object.class, null)
-    }
-
-    private List<Field> getFieldsToGenerate(GroovyObject gobject) {
-        return getAttributes(gobject.class) { ! (it.name in GROOVY_FIELDS) }
-    }
-
-    private List<Field> getAttributes(Class type, Closure filter) {
-        return ReflectionUtils.getClassHierarchy(type).collect { it.getDeclaredFields() }.flatten().findAll { Field field ->
-            def ok = filter == null || filter.call(field)
-            return ok && !Modifier.isStatic(field.modifiers) && !Modifier.isTransient(field.modifiers)
-        }
     }
 }
