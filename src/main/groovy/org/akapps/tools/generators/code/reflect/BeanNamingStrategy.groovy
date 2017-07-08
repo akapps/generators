@@ -1,4 +1,4 @@
-package org.akapps.tools.generators.code
+package org.akapps.tools.generators.code.reflect
 
 import groovy.transform.Immutable
 
@@ -10,7 +10,7 @@ import groovy.transform.Immutable
 interface BeanNamingStrategy {
 
     @Immutable
-    static class Instanciator { String variableName, instanciationCode }
+    static class Instanciator { String variableName, instantiationCode }
 
     /**
      * How to instantiate the new object
@@ -18,7 +18,7 @@ interface BeanNamingStrategy {
      * @param beanType class of the bean to be generated
      * @return both the variable name and the code for the instantiation
      */
-    Instanciator instanciateNew(Class beanType)
+    Instanciator instantiateNew(Class beanType)
 
     /**
      * Adds a value for one of the bean's attributes

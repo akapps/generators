@@ -1,14 +1,16 @@
 package org.akapps.tools.generators.code.scenarios
 
 import groovy.transform.CompileStatic
-import org.akapps.tools.generators.code.BuilderNamingStrategy
+import org.akapps.tools.generators.code.GroovyBook
 import org.akapps.tools.generators.code.JavaSoftware
-import org.akapps.tools.generators.code.ReflectionBeanCodeGenerator
 import org.akapps.tools.generators.code.intern.DefaultGeneratorResolver
+import org.akapps.tools.generators.code.reflect.BuilderNamingStrategy
+import org.akapps.tools.generators.code.reflect.ReflectionBeanCodeGenerator
 import org.joda.time.LocalDate
 import org.junit.Test
 
 import java.sql.Timestamp
+
 /**
  * Scenarios for tests about Java code generation for a given Java / Groovy object
  *
@@ -16,14 +18,6 @@ import java.sql.Timestamp
  */
 @CompileStatic
 class ReflectionToCodeScenarioIT {
-
-    /** Sample class to test groovy objects */
-    static class GroovyBook {
-        String title
-        int pages
-        Date publication
-        List<String> authors
-    }
 
     ReflectionBeanCodeGenerator generator = new ReflectionBeanCodeGenerator(new DefaultGeneratorResolver())
 

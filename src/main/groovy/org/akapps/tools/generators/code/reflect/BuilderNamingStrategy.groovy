@@ -1,4 +1,4 @@
-package org.akapps.tools.generators.code
+package org.akapps.tools.generators.code.reflect
 
 /**
  * Implementation based on the builder pattern.
@@ -8,7 +8,7 @@ package org.akapps.tools.generators.code
 class BuilderNamingStrategy implements BeanNamingStrategy {
 
     @Override
-    BeanNamingStrategy.Instanciator instanciateNew(Class beanType) {
+    BeanNamingStrategy.Instanciator instantiateNew(Class beanType) {
         return new BeanNamingStrategy.Instanciator('builder',
                 "new ${beanType.simpleName}Builder()")
     }

@@ -1,27 +1,25 @@
 package org.akapps.tools.generators.code.intern
 
 import org.akapps.tools.generators.code.CodeGenerator
-import org.akapps.tools.generators.util.ReflectionUtils
 
 /**
- * A code generator that handles simple Java types, based upon {@link TypesCodeWriter}
+ * A code generator that handles JodaTime types, based upon {@link JodaTimeWriter}
  *
  * @author Antoine Kapps
  */
-class SimpleTypesCodeGenerator implements CodeGenerator<Object> {
+class JodaTimeCodeGenerator implements CodeGenerator {
 
     @Override
     String asInstantiationCode(Object value) {
-        return TypesCodeWriter.toCode(value)
+        // We let Groovy dynamically find the appropriate method
+        return JodaTimeWriter.toCode(value)
     }
 
     static List<Class> getHandledTypes() {
-        return TypesCodeWriter.metaClass.methods.findAll {
+        return JodaTimeWriter.metaClass.methods.findAll {
             it.public && it.static && it.parameterTypes.length == 1
         }.collect {
             it.parameterTypes[0].getTheClass()
-        }.collectMany {
-            it.primitive ? [it, ReflectionUtils.getWrapperClassFor(it)] : [it]
         }.asImmutable()
     }
 }
